@@ -1,13 +1,5 @@
 require 'socket'
 
-def fizz(number)
-  'Fizz' if (number % 3).zero?
-end
-
-def buzz(number)
-  'Buzz' if (number % 5).zero?
-end
-
 def fizzbuzz(number)
   return 'Integers only' if number != 0 && number.to_i.zero?
   number = number.to_i
