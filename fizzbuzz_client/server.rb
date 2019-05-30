@@ -1,35 +1,33 @@
 require 'socket'
 
 def fizz(number)
-  (number % 3).zero? ? 'Fizz' : nil
+  'Fizz' if (number % 3).zero?
 end
 
 def buzz(number)
-  (number % 5).zero? ? 'Buzz' : nil
+  'Buzz' if (number % 5).zero?
 end
 
 def fizzbuzz(number)
-  return 'Integers only' if !number.zero? && number.to_i.zero?
+  return 'Integers only' if number != 0 && number.to_i.zero?
   number = number.to_i
   result = ''
-  result += fizz(number)
-  result += buzz(number)
+  result += 'Fizz' if (number % 3).zero?
+  result += 'Buzz' if (number % 5).zero?
   result.empty? ? number : result
 end
 
-TCPServer.open('0.0.0.0', 5555) { |server|
-  s = server.accept
-  s.puts 'Welcome to the FizzBuzz Server'
-  s.puts 'Type `exit` to quit'
-  s.puts Time.now
+TCPServer.open('0.0.0.0', 5555) do |server|
+  serv = server.accept
+  serv.puts 'Welcome to the FizzBuzz Server'
+  serv.puts 'Type `exit` to quit'
+  serv.puts Time.now
 
-  loop {
-    Thread.start(s) do |con|
-      input = con.gets.chomp
-      s.close if input == 'exit'
-      s.puts fizzbuzz(input)
-    end
-  }
+  loop do
+    input = serv.gets.chomp
+    serv.close if input == 'exit'
+    serv.puts fizzbuzz(input).to_s
+  end
 
-  s.close
-}
+  serv.close
+end
